@@ -1,5 +1,7 @@
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ModeEnum } from "../utils/enums/mode.enum";
+import { User } from "src/users/entities/user.entity";
+import { Booking } from "src/bookings/entities/booking.entity";
 
 const sslRequire = process.env.MODE === ModeEnum.Production ? {
     ssl: true,
@@ -17,7 +19,7 @@ const DataSource = TypeOrmModule.forRoot(
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         ...sslRequire,
-        entities: [],
+        entities: [User, Booking],
         synchronize: false
     }
 );

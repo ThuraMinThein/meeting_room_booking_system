@@ -4,6 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Databases } from './database/database';
 import { UsersModule } from './users/users.module';
+import { BookingsModule } from './bookings/bookings.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,9 +16,10 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    JwtModule.register({}),
     ...Databases,
     UsersModule,
+    BookingsModule,
+    AuthModule,
   ],
 })
 export class AppModule { }
