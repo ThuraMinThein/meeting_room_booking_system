@@ -1,0 +1,71 @@
+name: CD — Production Deployment to Google Cloud Run
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'backend/**'
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: asia-southeast1
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+  SERVICE_NAME: backend
+  REPO_NAME: meeting-booking-repo
+  IMAGE_NAME: backend
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy — backend
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: 'github-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and Push Image
+        run: |
+          IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest"
+          docker build -t $IMAGE_TAG -f backend/Dockerfile backend/
+          docker push $IMAGE_TAG
+
+      - name: Deploy to Cloud Run
+        run: |
+          IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest"
+
+          ENV_VARS="\
+          NODE_ENV=production,\
+          PORT=8080,\
+          DATABASE_HOST=${{ secrets.DATABASE_HOST }},\
+          DATABASE_PORT=${{ secrets.DATABASE_PORT }},\
+          DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }},\
+          DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }},\
+          DATABASE_NAME=${{ secrets.DATABASE_NAME }},\
+          JWT_SECRET=${{ secrets.JWT_SECRET }},\
+          TOKEN_EXPIRY_DAYS=${{ secrets.TOKEN_EXPIRY_DAYS }},\
+          CORS_ORIGINS=${{ secrets.CORS_ORIGINS }},\
+          ADMIN_USER_NAME=${{ secrets.ADMIN_USER_NAME }}"
+
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image=$IMAGE_TAG \
+            --region=${{ env.REGION }} \
+            --platform=managed \
+            --allow-unauthenticated \
+            --set-env-vars=$ENV_VARS \
+            --min-instances=0 \
+            --max-instances=2
