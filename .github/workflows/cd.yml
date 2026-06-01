@@ -49,7 +49,6 @@ jobs:
           IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest"
 
           ENV_VARS="^|^NODE_ENV=production|\
-          PORT=8080|\
           DATABASE_HOST=${{ secrets.DATABASE_HOST }}|\
           DATABASE_PORT=${{ secrets.DATABASE_PORT }}|\
           DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}|\
