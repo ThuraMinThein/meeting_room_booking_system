@@ -20,7 +20,7 @@ export class ParseNumberArrayPipe implements PipeTransform<number[]> {
                 return;
             }
 
-            const numberArray = parsedValue.map((item: any) => {
+            const numberArray = parsedValue.map((item: string) => {
                 const parsedNumber = parseFloat(item);
                 if (isNaN(parsedNumber)) {
                     throw new Error(`Invalid number value: ${item} of ${this.valueName}`);

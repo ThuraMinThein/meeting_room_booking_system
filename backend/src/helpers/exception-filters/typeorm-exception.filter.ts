@@ -9,7 +9,7 @@ export class TypeormExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
-        let message = (exception as any).message.message;
+        let message = (exception as any).message.message as string;
         let error = 'Unprocessable Entity';
 
         Logger.error(message, (exception as any).stack, `${request.method} ${request.url}`);

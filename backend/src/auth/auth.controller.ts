@@ -4,6 +4,7 @@ import { TypeormExceptionFilter } from 'src/helpers/exception-filters/typeorm-ex
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { GROUP_ALL_USERS } from 'src/utils/serializer/group.serializer';
+import { AuthenticatedRequest } from 'src/utils/constants/auth.constant';
 
 @Controller({ path: 'auth', version: '1' })
 @UseFilters(TypeormExceptionFilter)
@@ -21,7 +22,7 @@ export class AuthController {
     groups: [GROUP_ALL_USERS],
   })
   @Get('me')
-  getLoginUser(@Request() req: any) {
+  getLoginUser(@Request() req: AuthenticatedRequest) {
     return this.authService.getLoginUser(req.user);
   }
 

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
 import { Databases } from './database/database';
 import { UsersModule } from './users/users.module';
 import { BookingsModule } from './bookings/bookings.module';

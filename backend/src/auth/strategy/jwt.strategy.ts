@@ -4,6 +4,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { UserSerializer } from "src/users/serializer/user.serializer";
 import { UsersService } from "src/users/users.service";
+import { UserRoleEnum } from "src/utils/enums/user.enum";
 
 
 @Injectable()
@@ -19,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: any) {
+    async validate(payload: { sub: string, role: UserRoleEnum }) {
         const user = await this.usersService.findOne(payload.sub);
         return new UserSerializer(user);
     }

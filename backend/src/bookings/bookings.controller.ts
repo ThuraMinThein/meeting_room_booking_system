@@ -9,6 +9,7 @@ import { RoleGuard } from 'src/auth/guard/role.guard';
 import { ParseNumberPipe } from 'src/helpers/pipes/parse-number.pipe';
 import { GROUP_ALL_USERS } from 'src/utils/serializer/group.serializer';
 import { ParseDatePipe } from 'src/helpers/pipes/parse-date.pipe';
+import { AuthenticatedRequest } from 'src/utils/constants/auth.constant';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ groups: [GROUP_ALL_USERS] })
@@ -21,7 +22,7 @@ export class BookingsController {
   @Post()
   create(
     @Body() createBookingDto: CreateBookingDto,
-    @Request() req: any
+    @Request() req: AuthenticatedRequest
   ) {
     return this.bookingsService.create(req.user, createBookingDto);
   }
@@ -60,7 +61,7 @@ export class BookingsController {
   @Delete(':id')
   remove(
     @Param('id') id: string,
-    @Request() req: any
+    @Request() req: AuthenticatedRequest
   ) {
     return this.bookingsService.remove(req.user, id);
   }
