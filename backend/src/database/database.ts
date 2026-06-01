@@ -4,8 +4,8 @@ import { User } from "src/users/entities/user.entity";
 import { Booking } from "src/bookings/entities/booking.entity";
 
 const isProduction =
-    process.env.MODE === ModeEnum.Production ||
-    process.env.NODE_ENV === ModeEnum.Production;
+    process.env.MODE?.toLocaleLowerCase() === ModeEnum.Production.toLowerCase() ||
+    process.env.NODE_ENV?.toLowerCase() === ModeEnum.Production.toLowerCase();
 
 const sslRequire = isProduction
     ? {
