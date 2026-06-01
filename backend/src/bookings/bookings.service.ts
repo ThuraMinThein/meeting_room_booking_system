@@ -1,12 +1,13 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Between, DataSource, Repository } from 'typeorm';
 import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { User } from 'src/users/entities/user.entity';
 import { Pagination } from 'src/helpers/pagination/pagination';
 import { Paginate } from 'src/helpers/pagination/paginate';
 import { UserRoleEnum } from 'src/utils/enums/user.enum';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 @Injectable()
 export class BookingsService {
@@ -68,6 +69,32 @@ export class BookingsService {
 
   async findUserBookings(page: number, limit: number, userId: string): Promise<Pagination<Booking>> {
     return this.findAll(page, limit, userId);
+  }
+
+  async findBookingSummary(date: Date) {
+    const sm = startOfMonth(date);
+    const em = endOfMonth(date);
+
+    const totalBookings = await this.bookingsRepository.count({
+      where: {
+        startTime: Between(sm, em),
+      },
+    });
+
+    const users = await this.bookingsRepository.createQueryBuilder('booking')
+      .select('booking.userId', 'userId')
+      .addSelect('user.name', 'name')
+      .addSelect('COUNT(booking.id)', 'bookingCount')
+      .innerJoin(User, 'user', 'user.id = booking.userId')
+      .where('booking.startTime BETWEEN :start AND :end', { start: sm, end: em })
+      .groupBy('booking.userId')
+      .addGroupBy('user.name')
+      .getRawMany();
+
+    return {
+      totalBookings,
+      users,
+    };
   }
 
   async findOne(id: string): Promise<Booking> {

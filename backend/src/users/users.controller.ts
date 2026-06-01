@@ -43,7 +43,7 @@ export class UsersController {
     return this.usersService.findAllUsersWithoutPagination(search);
   }
 
-  @Patch('role/:id')
+  @Patch(':id/role')
   updateRole(
     @Param('id') id: string,
     @Body() updateUserRoleDto: UpdateUserRoleDto

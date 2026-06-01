@@ -8,6 +8,7 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/guard/role.guard';
 import { ParseNumberPipe } from 'src/helpers/pipes/parse-number.pipe';
 import { GROUP_ALL_USERS } from 'src/utils/serializer/group.serializer';
+import { ParseDatePipe } from 'src/helpers/pipes/parse-date.pipe';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @SerializeOptions({ groups: [GROUP_ALL_USERS] })
@@ -44,6 +45,16 @@ export class BookingsController {
   ) {
     return this.bookingsService.findUserBookings(page, limit, userId);
   }
+
+  @Roles(UserRoleEnum.Owner)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Get('summary')
+  findBookingSummary(
+    @Query('date', new DefaultValuePipe(new Date()), new ParseDatePipe('date')) date: Date,
+  ) {
+    return this.bookingsService.findBookingSummary(date);
+  }
+
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
