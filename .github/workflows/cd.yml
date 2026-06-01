@@ -48,17 +48,16 @@ jobs:
         run: |
           IMAGE_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:latest"
 
-          ENV_VARS="\
-          NODE_ENV=production,\
-          PORT=8080,\
-          DATABASE_HOST=${{ secrets.DATABASE_HOST }},\
-          DATABASE_PORT=${{ secrets.DATABASE_PORT }},\
-          DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }},\
-          DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }},\
-          DATABASE_NAME=${{ secrets.DATABASE_NAME }},\
-          JWT_SECRET=${{ secrets.JWT_SECRET }},\
-          TOKEN_EXPIRY_DAYS=${{ secrets.TOKEN_EXPIRY_DAYS }},\
-          CORS_ORIGINS=${{ secrets.CORS_ORIGINS }},\
+          ENV_VARS="^|^NODE_ENV=production|\
+          PORT=8080|\
+          DATABASE_HOST=${{ secrets.DATABASE_HOST }}|\
+          DATABASE_PORT=${{ secrets.DATABASE_PORT }}|\
+          DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}|\
+          DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}|\
+          DATABASE_NAME=${{ secrets.DATABASE_NAME }}|\
+          JWT_SECRET=${{ secrets.JWT_SECRET }}|\
+          TOKEN_EXPIRY_DAYS=${{ secrets.TOKEN_EXPIRY_DAYS }}|\
+          CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}|\
           ADMIN_USER_NAME=${{ secrets.ADMIN_USER_NAME }}"
 
           gcloud run deploy ${{ env.SERVICE_NAME }} \
@@ -66,6 +65,6 @@ jobs:
             --region=${{ env.REGION }} \
             --platform=managed \
             --allow-unauthenticated \
-            --set-env-vars=$ENV_VARS \
+            --set-env-vars="$ENV_VARS" \
             --min-instances=0 \
             --max-instances=2
