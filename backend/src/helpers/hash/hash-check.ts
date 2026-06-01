@@ -1,9 +1,9 @@
 import * as argon from 'argon2';
 
 const hashCheck = async (
-    { userPassword, signInPassword }: { userPassword: string, signInPassword: string }
+    { hashed, password }: { hashed: string, password: string }
 ) => {
-    const result = await argon.verify(userPassword, signInPassword);
+    const result = await argon.verify(hashed, password);
     return result;
 }
 
