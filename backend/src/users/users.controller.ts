@@ -26,13 +26,21 @@ export class UsersController {
   }
 
   @Get()
-  findAllAdmin(
+  findAllByAdmin(
     @Query('page', new DefaultValuePipe(1), new ParseNumberPipe('page')) page = 1,
     @Query('limit', new DefaultValuePipe(10), new ParseNumberPipe('limit')) limit = 10,
     @Query('search') search: string,
     @Query('roles', new ParseStringArrayPipe('roles', UserRoleArray)) roles: UserRoleEnum[]
   ) {
     return this.usersService.findAllUsers(page, limit, search, roles);
+  }
+
+  @Roles(UserRoleEnum.Owner)
+  @Get('full')
+  findAllUsers(
+    @Query('search') search: string,
+  ) {
+    return this.usersService.findAllUsersWithoutPagination(search);
   }
 
   @Patch('role/:id')

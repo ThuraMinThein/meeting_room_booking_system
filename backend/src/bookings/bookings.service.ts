@@ -1,37 +1,90 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
+import { DataSource, Repository } from 'typeorm';
 import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
+import { User } from 'src/users/entities/user.entity';
+import { Pagination } from 'src/helpers/pagination/pagination';
+import { Paginate } from 'src/helpers/pagination/paginate';
+import { UserRoleEnum } from 'src/utils/enums/user.enum';
 
 @Injectable()
 export class BookingsService {
   constructor(
     @InjectRepository(Booking)
     private readonly bookingsRepository: Repository<Booking>,
+    private readonly dataSource: DataSource
   ) { }
 
-  async create(createBookingDto: CreateBookingDto): Promise<Booking> {
-    return this.bookingsRepository.save(createBookingDto);
+  async create(user: User, createBookingDto: CreateBookingDto): Promise<Booking> {
+
+    const { startTime, endTime } = createBookingDto;
+
+    if (startTime >= endTime) {
+      throw new BadRequestException(
+        'startTime must be before endTime',
+      );
+    }
+
+    return this.dataSource.transaction(
+      'SERIALIZABLE',
+      async (manager) => {
+        const overlap = await manager
+          .getRepository(Booking)
+          .createQueryBuilder('booking')
+          .where(
+            'booking.startTime < :endTime AND booking.endTime > :startTime',
+            { startTime, endTime },
+          )
+          .getOne();
+
+        if (overlap) {
+          throw new BadRequestException(
+            'Booking overlaps with an existing booking.',
+          );
+        }
+
+        const booking = manager.create(Booking, {
+          ...createBookingDto,
+          user,
+        });
+
+        return manager.save(booking);
+      },
+    );
   }
 
-  async findAll(): Promise<Booking[]> {
-    return this.bookingsRepository.find();
+  async findAll(page: number, limit: number, userId?: string): Promise<Pagination<Booking>> {
+    const queryBuilder = this.bookingsRepository.createQueryBuilder('booking')
+      .orderBy('booking.startTime', 'ASC')
+      .leftJoinAndSelect('booking.user', 'user');
+
+    if (userId) {
+      queryBuilder.where('booking.userId = :userId', { userId });
+    }
+
+    return Paginate(queryBuilder, { page, limit });
+  }
+
+  async findUserBookings(page: number, limit: number, userId: string): Promise<Pagination<Booking>> {
+    return this.findAll(page, limit, userId);
   }
 
   async findOne(id: string): Promise<Booking> {
     return this.bookingsRepository.findOneByOrFail({ id });
   }
 
-  async update(id: string, updateBookingDto: UpdateBookingDto): Promise<Booking> {
-    await this.bookingsRepository.update(id, updateBookingDto);
-    return this.findOne(id);
-  }
+  async remove(user: User, id: string): Promise<{ message: string }> {
+    const booking = await this.findOne(id);
 
-  async remove(id: string): Promise<void> {
+    if (user.role === UserRoleEnum.User && booking.userId !== user.id) {
+      throw new ForbiddenException('You are not the owner of this booking.');
+    }
+
     await this.bookingsRepository.delete(id);
+    return {
+      message: 'Booking deleted successfully',
+    }
   }
 
 }

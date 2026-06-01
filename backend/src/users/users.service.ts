@@ -115,6 +115,18 @@ export class UsersService {
     return Paginate(queryBuilder, { page, limit });
   }
 
+  async findAllUsersWithoutPagination(search?: string) {
+    const queryBuilder = this.usersRepository.createQueryBuilder('user')
+      .andWhere('user.role = :role', { role: UserRoleEnum.User })
+      .orderBy('user.createdAt', 'DESC');
+
+    if (search) {
+      queryBuilder.andWhere('user.name ILIKE :search', { search: `%${search}%` })
+    }
+
+    return queryBuilder.getMany();
+  }
+
   async updateRole(id: string, updateUserRoleDto: UpdateUserRoleDto): Promise<{ message: string }> {
     const { role } = updateUserRoleDto;
     const user = await this.findOne(id);

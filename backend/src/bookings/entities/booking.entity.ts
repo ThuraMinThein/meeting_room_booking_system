@@ -16,13 +16,13 @@ export class Booking {
 
     @Column({
         name: 'start_time',
-        type: 'timestamp',
+        type: 'timestamptz',
     })
     startTime!: Date;
 
     @Column({
         name: 'end_time',
-        type: 'timestamp',
+        type: 'timestamptz',
     })
     endTime!: Date;
 
