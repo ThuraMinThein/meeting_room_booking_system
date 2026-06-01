@@ -28,6 +28,8 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
+  console.log('CORS Origins:', corsOrigins);
+
   await app.listen(process.env.PORT || 8080);
 }
 
