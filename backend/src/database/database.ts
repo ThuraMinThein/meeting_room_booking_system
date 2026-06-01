@@ -3,11 +3,19 @@ import { ModeEnum } from "../utils/enums/mode.enum";
 import { User } from "src/users/entities/user.entity";
 import { Booking } from "src/bookings/entities/booking.entity";
 
-const sslRequire = process.env.MODE === ModeEnum.Production ? {
-    ssl: true,
-} : {
-    ssl: false,
-};
+const isProduction =
+    process.env.MODE === ModeEnum.Production ||
+    process.env.NODE_ENV === ModeEnum.Production;
+
+const sslRequire = isProduction
+    ? {
+        ssl: {
+            rejectUnauthorized: false,
+        },
+    }
+    : {
+        ssl: false,
+    };
 
 const DataSource = TypeOrmModule.forRoot(
 
