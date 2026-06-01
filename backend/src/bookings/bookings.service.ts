@@ -84,7 +84,7 @@ export class BookingsService {
     const users = await this.bookingsRepository.createQueryBuilder('booking')
       .select('booking.userId', 'userId')
       .addSelect('user.name', 'name')
-      .addSelect('COUNT(booking.id)', 'bookingCount')
+      .addSelect('COUNT(booking.id)::int', 'bookingCount')
       .innerJoin(User, 'user', 'user.id = booking.userId')
       .where('booking.startTime BETWEEN :start AND :end', { start: sm, end: em })
       .groupBy('booking.userId')
