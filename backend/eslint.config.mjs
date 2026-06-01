@@ -9,6 +9,7 @@ export default tseslint.config(
   },
   // eslint.configs.recommended,
   {
+    files: ["src/**/*.ts"],
     languageOptions: {
       globals: {
         ...globals.node,
