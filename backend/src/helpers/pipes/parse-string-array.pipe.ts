@@ -23,7 +23,7 @@ export class ParseStringArrayPipe implements PipeTransform<string | string[], st
                 return undefined;
             }
 
-            const filteredArray = parsedValue.filter((item: any) =>
+            const filteredArray = parsedValue.filter((item: string) =>
                 !this.allowedValues || this.allowedValues.includes(item)
             );
 

@@ -8,6 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { getTokenExpiryConstants, TokenConstants } from 'src/utils/constants/token-expired.constant';
 import hashCheck from 'src/helpers/hash/hash-check';
 import { User } from 'src/users/entities/user.entity';
+import { UserRoleEnum } from 'src/utils/enums/user.enum';
 
 
 @Injectable()
@@ -55,7 +56,7 @@ export class AuthService {
 
 
     // utils
-    async accessToken(userId: string, role: string): Promise<string> {
+    async accessToken(userId: string, role: UserRoleEnum): Promise<string> {
         const payload = {
             sub: userId,
             role: role

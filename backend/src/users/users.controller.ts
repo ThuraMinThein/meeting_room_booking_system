@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UseFilters, UseGuards, ClassSerializerInterceptor, UseInterceptors, SerializeOptions, Request, Query, DefaultValuePipe, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, UseFilters, UseGuards, ClassSerializerInterceptor, UseInterceptors, SerializeOptions, Query, DefaultValuePipe, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { TypeormExceptionFilter } from 'src/helpers/exception-filters/typeorm-exception.filter';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
