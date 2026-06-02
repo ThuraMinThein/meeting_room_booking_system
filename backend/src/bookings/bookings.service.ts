@@ -75,6 +75,7 @@ export class BookingsService {
     // get today bookings
     return this.bookingsRepository.createQueryBuilder('booking')
       .where('Date(booking.startTime) = :start', { start: date })
+      .leftJoinAndSelect('booking.user', 'user')
       .getMany();
   }
 
