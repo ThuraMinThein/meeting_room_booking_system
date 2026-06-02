@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Spinner } from "@/components/ui/spinner"
 import { useLogin } from "@/hooks/useAuth"
 import { toast } from "sonner"
 
@@ -70,7 +71,7 @@ const Login = () => {
                         </div>
 
                         <Button type="submit" className="w-full" disabled={isPending}>
-                            {isPending ? "Loading..." : "Sign In"}
+                            {isPending ? <Spinner /> : "Sign In"}
                         </Button>
                     </form>
                 </CardContent>
