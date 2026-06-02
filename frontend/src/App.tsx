@@ -8,6 +8,7 @@ import Bookings from "./pages/Bookings"
 import Users from "./pages/Users"
 import Dashboard from "./pages/Dashboard"
 import AuthLayout from "./layout/AuthLayout"
+import NotFound from "./pages/NotFound"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -77,6 +78,21 @@ function App() {
                   <Dashboard />
                 </RequireRole>
               }
+            />
+          </Route>
+
+          <Route>
+            <Route
+              path="*"
+              element={
+                <RequireAuth>
+                  <Navigate to="/not-found" replace />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/not-found"
+              element={<NotFound />}
             />
           </Route>
         </Routes>
