@@ -11,7 +11,7 @@ export const NAV_ITEMS = [
         title: "Bookings",
         url: "/bookings",
         icon: Calendar,
-        roles: ["Admin", "Owner", "Staff"],
+        roles: ["Admin", "Owner", "User"],
     },
     {
         title: "Users",
