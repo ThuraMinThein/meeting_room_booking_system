@@ -47,6 +47,14 @@ export class BookingsController {
     return this.bookingsService.findUserBookings(page, limit, userId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('date/:date')
+  findBookingsByDate(
+    @Param('date', new ParseDatePipe('date')) date: Date,
+  ) {
+    return this.bookingsService.findBookingsByDate(date);
+  }
+
   @Roles(UserRoleEnum.Owner)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('summary')
