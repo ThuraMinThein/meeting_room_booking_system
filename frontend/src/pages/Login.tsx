@@ -24,8 +24,6 @@ const Login = () => {
         const userName = formData.get("userName")?.toString();
         const password = formData.get("password")?.toString();
 
-        console.log(userName, password)
-
         if (!userName || !password) {
             toast.error("Please fill all the fields")
             return

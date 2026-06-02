@@ -8,7 +8,7 @@ export interface User {
   role: Role
 }
 
-interface GetUsersPaginatedParams {
+export interface GetUsersPaginatedParams {
   page: number
   limit: number
   search?: string

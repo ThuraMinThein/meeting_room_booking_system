@@ -1,10 +1,14 @@
 import { api } from './axios'
+import type { User } from './users'
 
 export interface Booking {
-  id: string
+  id?: string
   title: string
-  startTime: Date
-  endTime: Date
+  startTime: string
+  endTime: string
+  userId?: string
+  user?: User
+  createdAt?: string
 }
 
 export interface PaginatedBookings {
@@ -43,6 +47,10 @@ export const bookingsApi = {
   },
   getBookings: async (params: PaginationParams): Promise<PaginatedBookings> => {
     const response = await api.get<PaginatedBookings>('/bookings', { params })
+    return response.data
+  },
+  getBookingsByDate: async (date: Date): Promise<Booking[]> => {
+    const response = await api.get<Booking[]>(`/bookings/date/${date}`)
     return response.data
   },
   getBookingsByUser: async (userId: string, params: PaginationParams): Promise<PaginatedBookings> => {
