@@ -7,6 +7,9 @@ export class Booking {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
+    @Column({ default: null })
+    title!: string;
+
     @Column({ name: 'user_id' })
     userId!: string;
 

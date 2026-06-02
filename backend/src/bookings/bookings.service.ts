@@ -71,6 +71,14 @@ export class BookingsService {
     return this.findAll(page, limit, userId);
   }
 
+  async findBookingsByDate(date: Date): Promise<Booking[]> {
+    // get today bookings
+    return this.bookingsRepository.createQueryBuilder('booking')
+      .where('Date(booking.startTime) = :start', { start: date })
+      .leftJoinAndSelect('booking.user', 'user')
+      .getMany();
+  }
+
   async findBookingSummary(date: Date) {
     const sm = startOfMonth(date);
     const em = endOfMonth(date);

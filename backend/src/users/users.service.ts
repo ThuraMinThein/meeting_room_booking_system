@@ -101,7 +101,7 @@ export class UsersService {
     roles?: UserRoleEnum[]
   ) {
     const queryBuilder = this.usersRepository.createQueryBuilder('user')
-      .andWhere('user.role = :role', { role: UserRoleEnum.User })
+      // .andWhere('user.role = :role', { role: UserRoleEnum.User })
       .orderBy('user.createdAt', 'DESC');
 
     if (search) {
