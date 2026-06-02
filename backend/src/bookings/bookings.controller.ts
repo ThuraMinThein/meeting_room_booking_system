@@ -36,7 +36,7 @@ export class BookingsController {
     return this.bookingsService.findAll(page, limit);
   }
 
-  @Roles(UserRoleEnum.Owner)
+  @Roles(UserRoleEnum.Owner, UserRoleEnum.Admin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('user/:userId')
   findUserBookings(
@@ -55,7 +55,7 @@ export class BookingsController {
     return this.bookingsService.findBookingsByDate(date);
   }
 
-  @Roles(UserRoleEnum.Owner)
+  @Roles(UserRoleEnum.Owner, UserRoleEnum.Admin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Get('summary')
   findBookingSummary(
