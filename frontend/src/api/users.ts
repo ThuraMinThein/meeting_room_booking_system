@@ -2,10 +2,12 @@ import type { Role } from "@/hooks/useRole";
 import { api } from "./axios";
 
 export interface User {
-  id: string
+  id?: string
   name: string
   userName: string
   role: Role
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface GetUsersPaginatedParams {
@@ -15,14 +17,24 @@ export interface GetUsersPaginatedParams {
   roles?: Role[]
 }
 
+export interface PaginatedUser {
+  items: User[]
+  meta: {
+    itemCount: number
+    totalItems: number
+    hasNextPage: boolean
+    totalPage: number
+  }
+}
+
 export const usersApi = {
   createUser: async (user: User): Promise<User> => {
     const response = await api.post('/users', user)
     return response.data
   },
-  getUsersPaginated: async (params: GetUsersPaginatedParams): Promise<User[]> => {
-    const response = await api.get<{ bookings: User[] }>('/users', { params })
-    return response.data.bookings || []
+  getUsersPaginated: async (params: GetUsersPaginatedParams): Promise<PaginatedUser> => {
+    const response = await api.get<PaginatedUser>('/users', { params })
+    return response.data || []
   },
   getUsers: async (search?: string): Promise<User[]> => {
     const params = search ? { search: search } : {}

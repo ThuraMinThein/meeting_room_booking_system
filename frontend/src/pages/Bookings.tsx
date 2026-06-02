@@ -1,7 +1,7 @@
 import type { Booking } from "@/api/bookings";
 import type { User } from "@/api/users";
 import { CreateBookingDialog } from "@/components/CreateBookingDialog";
-import DeleteBookingButton from "@/components/delete-booking-buttom";
+import DeleteBookingButton from "@/components/DeleteBookingButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
