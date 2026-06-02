@@ -1,4 +1,4 @@
-import { bookingsApi, type Booking, type BookingSummaryParam, type PaginationParams } from "@/api/bookings"
+import { bookingsApi, type Booking, type PaginationParams } from "@/api/bookings"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { AxiosError } from "axios"
 import { toast } from "sonner"
@@ -41,14 +41,16 @@ const useGetBookingsByDate = (date?: Date) => useQuery({
     enabled: !!date,
 })
 
-const useGetBookingsByUser = (userId: string, params: PaginationParams) => useQuery({
+const useGetBookingsByUser = (userId?: string, params?: PaginationParams) => useQuery({
     queryKey: ['bookings', userId, params],
-    queryFn: () => bookingsApi.getBookingsByUser(userId, params),
+    queryFn: () => bookingsApi.getBookingsByUser(userId!, params!),
+    enabled: !!userId
 })
 
-const useGetBookingSummary = (params: BookingSummaryParam) => useQuery({
-    queryKey: ['bookings-summary', params],
-    queryFn: () => bookingsApi.getBookingSummary(params),
+const useGetBookingSummary = (date?: Date) => useQuery({
+    queryKey: ['bookings-summary', date],
+    queryFn: () => bookingsApi.getBookingSummary({ date: date! }),
+    enabled: !!date
 })
 
 const useDeleteBooking = () => {

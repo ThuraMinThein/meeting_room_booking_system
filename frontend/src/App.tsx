@@ -32,6 +32,7 @@ function RequireGuest({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  const role = useAuthStore((state) => state.user?.role)
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -39,7 +40,7 @@ function App() {
 
           <Route
             path="/"
-            element={<Navigate to="/bookings" replace />}
+            element={role && role === "Owner" ? <Navigate to="/dashboard" replace /> : <Navigate to="/bookings" replace />}
           />
 
           <Route element={<AuthLayout />}>
