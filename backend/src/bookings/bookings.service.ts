@@ -74,7 +74,7 @@ export class BookingsService {
   async findBookingsByDate(date: Date): Promise<Booking[]> {
     // get today bookings
     return this.bookingsRepository.createQueryBuilder('booking')
-      .where('Date(booking.startTime) = :start', { start: date.toISOString().split('T')[0] })
+      .where('Date(booking.startTime) = :start', { start: date })
       .getMany();
   }
 
