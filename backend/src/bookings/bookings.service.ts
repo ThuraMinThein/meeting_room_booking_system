@@ -21,6 +21,12 @@ export class BookingsService {
 
     const { startTime, endTime } = createBookingDto;
 
+    if (startTime < new Date()) {
+      throw new BadRequestException(
+        'startTime must be in the future',
+      );
+    }
+
     if (startTime >= endTime) {
       throw new BadRequestException(
         'startTime must be before endTime',

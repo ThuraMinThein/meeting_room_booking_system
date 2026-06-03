@@ -92,6 +92,14 @@ export function CreateBookingDialog({
             0
         );
 
+        if (start < new Date()) {
+            setError(
+                "Start time must be in the future."
+            );
+
+            return;
+        }
+
         if (end <= start) {
             setError(
                 "End time must be after start time."
