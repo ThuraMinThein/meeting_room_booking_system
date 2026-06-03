@@ -274,7 +274,7 @@ const Bookings = () => {
 
                     <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-sm text-muted-foreground">
-                            Showing {data?.meta.itemCount} of{" "}
+                            {data && data?.meta.itemCount * page} of{" "}
                             {data?.meta.totalItems} bookings
                         </p>
 
