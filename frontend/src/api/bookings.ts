@@ -50,7 +50,11 @@ export const bookingsApi = {
     return response.data
   },
   getBookingsByDate: async (date: Date): Promise<Booking[]> => {
-    const response = await api.get<Booking[]>(`/bookings/date/${date}`)
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    const dateStr = `${y}-${m}-${d}`
+    const response = await api.get<Booking[]>(`/bookings/date/${dateStr}`)
     return response.data
   },
   getBookingsByUser: async (userId: string, params: PaginationParams): Promise<PaginatedBookings> => {
