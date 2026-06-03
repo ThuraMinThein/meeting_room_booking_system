@@ -15,7 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { useState } from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
-import { NAV_ITEMS } from "@/lib/constants/navbar-items.constant";
+import { NAV_ITEMS } from "@/utils/constants/navbar-items.constant";
 
 export function AppSidebar() {
 
