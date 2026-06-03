@@ -33,8 +33,26 @@ export const usersApi = {
     return response.data
   },
   getUsersPaginated: async (params: GetUsersPaginatedParams): Promise<PaginatedUser> => {
-    const response = await api.get<PaginatedUser>('/users', { params })
-    return response.data || []
+    const response = await api.get<PaginatedUser>('/users', {
+      params,
+      paramsSerializer: {
+        serialize: (params) => {
+          const searchParams = new URLSearchParams();
+          for (const key in params) {
+            if (params[key] !== undefined && params[key] !== null) {
+              if (Array.isArray(params[key])) {
+                searchParams.append(key, JSON.stringify(params[key]));
+              } else {
+                searchParams.append(key, String(params[key]));
+              }
+            }
+          }
+          return searchParams.toString();
+        }
+      }
+    });
+
+    return response.data || [];
   },
   getUsers: async (search?: string): Promise<User[]> => {
     const params = search ? { search: search } : {}
