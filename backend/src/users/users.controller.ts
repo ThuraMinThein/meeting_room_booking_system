@@ -35,7 +35,7 @@ export class UsersController {
     return this.usersService.findAllUsers(page, limit, search, roles);
   }
 
-  @Roles(UserRoleEnum.Owner)
+  @Roles(UserRoleEnum.Owner, UserRoleEnum.Admin)
   @Get('full')
   findAllUsers(
     @Query('search') search: string,

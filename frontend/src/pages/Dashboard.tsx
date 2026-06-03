@@ -40,6 +40,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import { DashboardSkeleton } from "@/components/DashboardSkeleton";
 
 const Dashboard = () => {
 
@@ -52,9 +53,9 @@ const Dashboard = () => {
     const [limit] = useState(10);
     const [selectedUserId, setSelectedUserId] = useState<string | undefined>(undefined);
 
-    const { data: summary } = useGetBookingSummary(selectedDate);
+    const { data: summary, isPending: isSummaryPending } = useGetBookingSummary(selectedDate);
     const { data: users = [] } = useGetUsers();
-    const { data: bookings = [] } = useGetBookingsByDate(selectedDate);
+    const { data: bookings = [], isPending: isBookingsPending } = useGetBookingsByDate(selectedDate);
     const { data: userBookings } = useGetBookingsByUser(selectedUserId, { page, limit });
 
     const bookedHours = bookings.reduce(
@@ -77,8 +78,8 @@ const Dashboard = () => {
         0
     );
 
-    if (!summary || !users || !bookings) {
-        return null;
+    if (isSummaryPending || isBookingsPending) {
+        return <DashboardSkeleton />;
     }
 
     return (
@@ -134,7 +135,7 @@ const Dashboard = () => {
 
                     <CardContent>
                         <div className="text-3xl font-bold">
-                            {summary.totalBookings}
+                            {summary?.totalBookings}
                         </div>
                     </CardContent>
                 </Card>
@@ -289,7 +290,7 @@ const Dashboard = () => {
                                     {users.map((user) => (
                                         <SelectItem
                                             key={user.id}
-                                            value={user.id}
+                                            value={user.id!}
                                         >
                                             {user.name}
                                         </SelectItem>
