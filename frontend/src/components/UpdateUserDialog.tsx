@@ -9,8 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { Spinner } from "./ui/spinner";
+import { useEffect, useState } from "react";
 import type { Role } from "@/hooks/useRole";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import type { User } from "@/api/users";
@@ -33,10 +32,17 @@ export function UpdateUserDialog({
     onSubmit,
 }: Props) {
 
-    const [name, setName] = useState("hhh");
-    const [isLoading] = useState(false);
-    const [userName, setUserName] = useState(user?.userName);
-    const [role, setRole] = useState<Role | undefined>(user?.role);
+    const [name, setName] = useState("");
+    const [userName, setUserName] = useState("");
+    const [role, setRole] = useState<Role | undefined>();
+
+    useEffect(() => {
+        if (open && user) {
+            setName(user.name);
+            setUserName(user.userName);
+            setRole(user.role);
+        }
+    }, [open, user]);
 
     const [error, setError] = useState<string>();
 
@@ -100,7 +106,7 @@ export function UpdateUserDialog({
 
                         <Select
                             value={role}
-                            onValueChange={setRole}
+                            onValueChange={(value) => setRole(value as Role)}
                         >
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select role" />
@@ -117,13 +123,6 @@ export function UpdateUserDialog({
                         </Select>
                     </div>
                 </div>
-
-                {isLoading && (
-                    <p className="text-sm text-muted-foreground">
-                        Loading existing
-                        Users <Spinner />
-                    </p>
-                )}
 
                 {error && (
                     <p className="text-sm text-red-500">

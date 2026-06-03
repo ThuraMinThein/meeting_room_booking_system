@@ -122,7 +122,7 @@ export function CreateUserDialog({
 
                         <Select
                             value={role}
-                            onValueChange={setRole}
+                            onValueChange={(value) => setRole(value as Role)}
                         >
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select role" />
