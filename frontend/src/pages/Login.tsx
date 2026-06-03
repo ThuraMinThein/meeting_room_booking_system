@@ -20,7 +20,7 @@ const Login = () => {
     const { mutate, isPending } = useLogin()
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const activeTab = searchParams.get("credentials") ?? "select";
+    const activeTab = searchParams.get("tab") ?? "credentials";
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
