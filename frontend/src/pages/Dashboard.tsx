@@ -32,7 +32,6 @@ import {
 
 import { Calendar } from "@/components/ui/calendar";
 
-import { Badge } from "@/components/ui/badge";
 import { useGetBookingsByDate, useGetBookingsByUser, useGetBookingSummary } from "@/hooks/useBooking";
 import { useGetUsers } from "@/hooks/useUser";
 import { useSearchParams } from "react-router-dom";
@@ -41,6 +40,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { DashboardSkeleton } from "@/components/DashboardSkeleton";
+import { MonthlyUserStats } from "@/components/MonthlyUserStatsChart";
 
 const Dashboard = () => {
 
@@ -237,41 +237,7 @@ const Dashboard = () => {
                             </CardContent>
                         </Card>
 
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>
-                                    Monthly User Stats
-                                </CardTitle>
-                            </CardHeader>
-
-                            <CardContent>
-                                <ScrollArea className="h-100">
-                                    <div className="space-y-3">
-                                        {summary?.users?.length === 0 && (
-                                            <Empty>
-                                                <EmptyHeader>
-                                                    <EmptyTitle>No Users Have Booked for This Month</EmptyTitle>
-                                                </EmptyHeader>
-                                            </Empty>
-                                        )}
-                                        {summary?.users.map((user) => (
-                                            <div
-                                                key={user.userId}
-                                                className="flex items-center justify-between rounded-lg border p-3"
-                                            >
-                                                <span>{user.name}</span>
-                                                <div>
-                                                    <span>Bookings: </span>
-                                                    <Badge className="px-4 py-1">
-                                                        {user.bookingCount}
-                                                    </Badge>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </ScrollArea>
-                            </CardContent>
-                        </Card>
+                        <MonthlyUserStats summary={summary} />
                     </div>
                 </TabsContent>
                 <TabsContent value="user-bookings">

@@ -36,7 +36,7 @@ interface UserWithBookingCount {
   bookingCount: number
 }
 
-interface BookingSummary {
+export interface BookingSummary {
   totalBookings: number
   users: UserWithBookingCount[]
 }
