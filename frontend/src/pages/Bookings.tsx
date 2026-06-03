@@ -220,6 +220,18 @@ const Bookings = () => {
                                     <div className="grid gap-3 text-sm">
                                         <div>
                                             <p className="text-muted-foreground">
+                                                Meeting Date
+                                            </p>
+                                            <p>
+                                                {new Date(booking.startTime!).toLocaleDateString("en-US", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                })}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-muted-foreground">
                                                 Start Time
                                             </p>
                                             <p>
@@ -240,14 +252,6 @@ const Bookings = () => {
                                             </p>
                                         </div>
 
-                                        <div>
-                                            <p className="text-muted-foreground">
-                                                Created At
-                                            </p>
-                                            <p>
-                                                {new Date(booking.createdAt!).toLocaleDateString()}
-                                            </p>
-                                        </div>
                                     </div>
                                     {canDeleteBooking(
                                         booking,
@@ -270,7 +274,7 @@ const Bookings = () => {
 
                     <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-sm text-muted-foreground">
-                            Showing {data?.meta.itemCount} of{" "}
+                            {data && data?.meta.itemCount * page} of{" "}
                             {data?.meta.totalItems} bookings
                         </p>
 
