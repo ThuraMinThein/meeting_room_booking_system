@@ -176,7 +176,7 @@ export function CreateBookingDialog({
                             <div className="flex gap-2">
                                 <Input
                                     type="text"
-                                    placeholder="12:30"
+                                    placeholder="00:00"
                                     disabled={!date}
                                     value={startTime}
                                     required
@@ -204,7 +204,7 @@ export function CreateBookingDialog({
                             <div className="flex gap-2">
                                 <Input
                                     type="text"
-                                    placeholder="2:30"
+                                    placeholder="00:00"
                                     disabled={!date}
                                     value={endTime}
                                     required
